@@ -119,6 +119,7 @@ export function CustomersPage() {
           {data.items.length === 0 ? (
             <Empty message="No customers found." />
           ) : (
+            <div className="table-wrap">
             <table>
               <thead>
                 <tr>
@@ -139,6 +140,7 @@ export function CustomersPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           )}
 
           <Pagination

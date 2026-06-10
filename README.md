@@ -82,16 +82,29 @@ never published for an order that rolled back.
 
 ## Running it
 
-### Option A — Docker Compose (everything)
+### Prerequisites
 
-Requires Docker. From the repository root:
+| Tool | Needed for | Notes |
+| ---- | ---------- | ----- |
+| [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) | Building/running the API, Worker and tests | `dotnet --version` should print `8.0.x` |
+| [Node.js 20+](https://nodejs.org) | The React front-end | |
+| [Docker Desktop](https://www.docker.com/products/docker-desktop/) | SQL Server + RabbitMQ | **Required for a full run** — SQL Server has no native macOS build, so it runs in a container |
+
+> The complete test suite (`dotnet test`) runs with **no Docker and no external services** — it
+> uses the EF in-memory provider and an in-process host — so you can verify everything works
+> before installing anything else.
+
+### Option A — Docker Compose (everything, recommended)
+
+From the repository root, with Docker Desktop running:
 
 ```bash
 docker compose up --build
 ```
 
 This starts SQL Server, RabbitMQ, the API, the worker and the web app. The API runs in the
-`Development` profile so it auto-applies migrations and seeds sample data.
+`Development` profile so it auto-applies migrations and seeds sample data. First run pulls
+images and builds, so allow a few minutes.
 
 | Service        | URL                                            |
 | -------------- | ---------------------------------------------- |
@@ -100,21 +113,42 @@ This starts SQL Server, RabbitMQ, the API, the worker and the web app. The API r
 | RabbitMQ admin | http://localhost:15672  (guest / guest)        |
 | SQL Server     | localhost,1433  (sa / Your_strong_Pass123)     |
 
-### Option B — Run locally
+Stop with `Ctrl+C`, then `docker compose down` (add `-v` to also drop the database volume).
 
-Prerequisites: .NET 8 SDK, Node 20+, and SQL Server + RabbitMQ reachable (the compose file
-can provide just those: `docker compose up sqlserver rabbitmq`).
+### Option B — Apps with `dotnet`/`npm`, infrastructure in Docker
+
+Run only SQL Server and RabbitMQ in containers and the apps directly — useful while developing
+so you get hot-reload and breakpoints:
 
 ```bash
-# API (auto-migrates + seeds in Development, serves Swagger at /swagger)
+# Terminal 1 — infrastructure only
+docker compose up sqlserver rabbitmq
+
+# Terminal 2 — API (auto-migrates + seeds in Development, serves Swagger at /swagger)
 dotnet run --project src/SadcOms.Api
 
-# Worker (separate terminal)
+# Terminal 3 — Worker
 dotnet run --project src/SadcOms.Worker
 
-# Front-end (separate terminal)
+# Terminal 4 — Front-end
 cd src/web && npm install && npm run dev   # http://localhost:5173
 ```
+
+The default connection string and RabbitMQ host in `appsettings.json` already point at
+`localhost`, so no extra configuration is needed for this layout.
+
+### Troubleshooting
+
+- **`docker compose` says "command not found"** — Docker Desktop isn't installed or isn't on
+  your PATH. Install it from the link above and ensure the whale icon in the menu bar shows it
+  running.
+- **Docker Desktop shows "An unexpected error occurred" / `com.docker.virtualization`
+  terminated** — its internal VM failed to start (unrelated to this project). Click **Reset to
+  factory defaults** in the dialog and relaunch; if it persists, in **Settings → General** try
+  switching the **Virtual Machine Manager** backend, then Apply & Restart.
+- **API can't connect to SQL Server on first start** — SQL Server can be slow to accept
+  connections. The API retries automatically (`EnableRetryOnFailure`); give Docker Desktop at
+  least 4 GB RAM (Settings → Resources) if it keeps failing.
 
 ### Authentication for trying it out
 

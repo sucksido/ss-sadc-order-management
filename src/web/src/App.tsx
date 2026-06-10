@@ -37,7 +37,7 @@ export default function App() {
         </nav>
         <div className="auth">
           {isAuthenticated ? (
-            <span className="muted">Signed in (dev token)</span>
+            <span className="auth-status">Signed in (dev token)</span>
           ) : (
             <button onClick={onSignIn} disabled={signingIn}>
               {signingIn ? 'Signing in…' : 'Sign in (dev token)'}

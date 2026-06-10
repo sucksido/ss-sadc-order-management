@@ -76,7 +76,7 @@ export function OrderDetailsPage() {
 
       <dl className="details">
         <dt>Status</dt>
-        <dd>{order.status}</dd>
+        <dd><span className={`badge badge--${order.status.toLowerCase()}`}>{order.status}</span></dd>
         <dt>Currency</dt>
         <dd>{order.currencyCode}</dd>
         <dt>Total</dt>
@@ -86,6 +86,7 @@ export function OrderDetailsPage() {
       </dl>
 
       <h3>Line items</h3>
+      <div className="table-wrap">
       <table>
         <thead>
           <tr>
@@ -106,6 +107,7 @@ export function OrderDetailsPage() {
           ))}
         </tbody>
       </table>
+      </div>
 
       <h3>Change status</h3>
       {nextStates.length === 0 ? (

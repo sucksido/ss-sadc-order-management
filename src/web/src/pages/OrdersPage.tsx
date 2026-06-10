@@ -191,6 +191,7 @@ export function OrdersPage() {
           {data.items.length === 0 ? (
             <Empty message="No orders found." />
           ) : (
+            <div className="table-wrap">
             <table>
               <thead>
                 <tr>
@@ -207,7 +208,7 @@ export function OrdersPage() {
                     <td>
                       <Link to={`/orders/${o.id}`}>{o.id.slice(0, 8)}…</Link>
                     </td>
-                    <td>{o.status}</td>
+                    <td><span className={`badge badge--${o.status.toLowerCase()}`}>{o.status}</span></td>
                     <td>{o.currencyCode}</td>
                     <td>{o.totalAmount.toFixed(2)}</td>
                     <td>{new Date(o.createdAt).toLocaleString()}</td>
@@ -215,6 +216,7 @@ export function OrdersPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           )}
 
           <div className="pagination">

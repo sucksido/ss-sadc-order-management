@@ -1,123 +1,451 @@
-/* Deliberately minimal styling — the brief does not require design work, just usable UI. */
+/* ---------------------------------------------------------------------------
+   SADC OMS — front-end styling.
+   A small, self-contained design system (no UI framework): tokens, base
+   elements, and a few component classes used across the pages.
+--------------------------------------------------------------------------- */
+
 :root {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color: #1f2933;
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-weak: #eef2ff;
+  --ring: rgba(79, 70, 229, 0.35);
+
+  --danger: #dc2626;
+  --danger-weak: #fef2f2;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08);
+
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: #f5f7fa;
+  background:
+    radial-gradient(900px 500px at 100% -10%, #e0e7ff 0%, rgba(224, 231, 255, 0) 60%),
+    var(--bg);
+  min-height: 100vh;
 }
 
+/* ----------------------------------------------------------------- Layout */
+
 .app {
-  max-width: 920px;
+  max-width: 1040px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0 1.5rem 4rem;
 }
 
 header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  border-bottom: 1px solid #d9e2ec;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 1.25rem;
+  padding: 1.1rem 0;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(241, 245, 249, 0.85);
+  backdrop-filter: saturate(180%) blur(8px);
+  z-index: 10;
 }
 
 header h1 {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
   margin: 0;
   flex: 1;
 }
 
+header h1::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 0.55rem;
+  border-radius: 3px;
+  background: linear-gradient(135deg, var(--primary), #06b6d4);
+  vertical-align: middle;
+}
+
+nav {
+  display: flex;
+  gap: 0.35rem;
+}
+
 nav a {
-  margin-right: 1rem;
   text-decoration: none;
-  color: #334e68;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.92rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+nav a:hover {
+  color: var(--text);
+  background: var(--surface);
 }
 
 nav a.active {
-  font-weight: 600;
-  text-decoration: underline;
+  color: var(--primary);
+  background: var(--primary-weak);
 }
 
+.auth {
+  display: flex;
+  align-items: center;
+}
+
+main {
+  animation: fade-in 0.25s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+h2 {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+/* ------------------------------------------------------------------ Cards */
+
 .card {
-  background: #fff;
-  border: 1px solid #d9e2ec;
-  border-radius: 6px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+  margin-bottom: 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-width: 480px;
+  gap: 0.9rem;
+  max-width: 560px;
 }
+
+/* ------------------------------------------------------------- Form fields */
 
 label {
   display: flex;
   flex-direction: column;
-  font-size: 0.875rem;
-  gap: 0.25rem;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
 }
 
 input,
-select,
+select {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:hover,
+select:hover {
+  border-color: #94a3b8;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  margin: 0;
+  background: var(--surface-muted);
+}
+
+legend {
+  padding: 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* --------------------------------------------------------------- Buttons */
+
 button {
-  padding: 0.4rem 0.5rem;
+  font: inherit;
+  font-weight: 600;
   font-size: 0.9rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+button:hover:not(:disabled) {
+  border-color: #94a3b8;
+  background: var(--surface-muted);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Primary action: the form submit buttons and the sign-in button. */
+button[type="submit"],
+.auth button {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+button[type="submit"]:hover:not(:disabled),
+.auth button:hover:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+button[type="submit"] {
+  margin-top: 0.25rem;
+  padding: 0.6rem 1rem;
+}
+
+.auth button {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+}
+
+/* --------------------------------------------------------------- Tables */
+
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  margin-top: 0.5rem;
+  font-size: 0.92rem;
 }
 
-th,
-td {
+thead th {
   text-align: left;
-  padding: 0.4rem 0.6rem;
-  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  background: var(--surface-muted);
+  border-bottom: 1px solid var(--border);
 }
+
+tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr {
+  transition: background 0.12s ease;
+}
+
+tbody tr:hover {
+  background: var(--primary-weak);
+}
+
+td a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------- Toolbar */
 
 .toolbar {
-  margin: 0.5rem 0;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  margin: 0.5rem 0 1rem;
 }
+
+.toolbar input,
+.toolbar select {
+  max-width: 320px;
+}
+
+/* -------------------------------------------------------------- Pagination */
 
 .pagination {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.75rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+/* ----------------------------------------------------------- Order detail */
+
+.details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  max-width: 560px;
+  margin-bottom: 1.5rem;
+}
+
+.details dt {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.details dd {
+  margin: 0;
+  font-weight: 600;
 }
 
 .line-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr auto;
   gap: 0.5rem;
-  margin-bottom: 0.4rem;
-}
-
-.details {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 0.25rem 1rem;
-}
-
-.details dt {
-  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
 .actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
+/* --------------------------------------------------------------- Badges */
+
+.badge {
+  display: inline-block;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.badge--pending {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.badge--paid {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+
+.badge--fulfilled {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.badge--cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+/* Auth status pill ("Signed in"). */
+.auth-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #166534;
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  padding: 0.32rem 0.7rem;
+  border-radius: 999px;
+}
+
+.auth-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* ----------------------------------------------------------- Feedback text */
+
 .muted {
-  color: #627d98;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .error {
-  color: #b91c1c;
+  color: var(--danger);
+  background: var(--danger-weak);
+  border: 1px solid #fecaca;
+  border-left: 3px solid var(--danger);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.88rem;
+  margin: 0;
 }
