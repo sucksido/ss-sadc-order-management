@@ -78,6 +78,7 @@ namespace SadcOms.Infrastructure.Persistence.Migrations
 
                 b.Property<byte[]>("RowVersion")
                     .IsConcurrencyToken()
+                    .IsRequired()
                     .ValueGeneratedOnAddOrUpdate()
                     .HasColumnType("rowversion");
 
