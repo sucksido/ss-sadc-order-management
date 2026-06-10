@@ -1,0 +1,123 @@
+/* Deliberately minimal styling — the brief does not require design work, just usable UI. */
+:root {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #1f2933;
+}
+
+body {
+  margin: 0;
+  background: #f5f7fa;
+}
+
+.app {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid #d9e2ec;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+header h1 {
+  font-size: 1.25rem;
+  margin: 0;
+  flex: 1;
+}
+
+nav a {
+  margin-right: 1rem;
+  text-decoration: none;
+  color: #334e68;
+}
+
+nav a.active {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #d9e2ec;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 480px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  gap: 0.25rem;
+}
+
+input,
+select,
+button {
+  padding: 0.4rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  margin-top: 0.5rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid #e4e7eb;
+}
+
+.toolbar {
+  margin: 0.5rem 0;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.line-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1rem;
+}
+
+.details dt {
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.muted {
+  color: #627d98;
+}
+
+.error {
+  color: #b91c1c;
+}

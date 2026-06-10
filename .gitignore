@@ -1,0 +1,41 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+artifacts/
+
+# .NET
+*.user
+*.suo
+.vs/
+*.userprefs
+project.lock.json
+*.nupkg
+*.snupkg
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# Frontend
+node_modules/
+src/web/dist/
+src/web/.vite/
+*.log
+npm-debug.log*
+
+# Environment / secrets
+.env
+.env.*
+appsettings.*.Local.json
+**/secrets.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+[Tt]est[Rr]esults/
+coverage/
+*.coverage
+*.trx

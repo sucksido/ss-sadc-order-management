@@ -1,0 +1,24 @@
+<Project>
+
+  <!-- Shared compiler settings applied to every project in the solution. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!-- Strict in CI/Release so warnings can't accumulate; lenient in Debug to keep the
+         local inner-loop fast. CI builds with -c Release (see .github/workflows/ci.yml). -->
+    <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
+    <!-- NuGet security-audit advisories (NU190x) are surfaced as warnings but must not fail
+         the build; they are triaged and patched on their own cadence. -->
+    <WarningsNotAsErrors>NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
+  </PropertyGroup>
+
+  <!-- Central Package Management is enabled solution-wide (see Directory.Packages.props). -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+</Project>

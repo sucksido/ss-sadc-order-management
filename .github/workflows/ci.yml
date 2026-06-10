@@ -1,0 +1,70 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend build & test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore SadcOms.sln
+
+      - name: Build
+        run: dotnet build SadcOms.sln -c Release --no-restore
+
+      - name: Test
+        run: dotnet test SadcOms.sln -c Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+  migrations:
+    name: Validate EF migrations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install EF tooling
+        run: dotnet tool install --global dotnet-ef --version 8.*
+
+      # Fails the build if the EF model has changes not captured by a migration — i.e. someone
+      # changed an entity/config without adding a migration. This keeps schema and code in sync.
+      - name: Check for pending model changes
+        run: |
+          dotnet ef migrations has-pending-model-changes \
+            --project src/SadcOms.Infrastructure \
+            --startup-project src/SadcOms.Api
+
+  frontend:
+    name: Frontend build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm install
+
+      - name: Type-check & build
+        run: npm run build

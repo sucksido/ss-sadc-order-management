@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The domain layer deliberately has no third-party dependencies. It models the
+    business invariants (order lifecycle, totals, SADC/CMA currency rules) and can
+    be unit tested in isolation without a database or message broker.
+  -->
+  <PropertyGroup>
+    <RootNamespace>SadcOms.Domain</RootNamespace>
+  </PropertyGroup>
+
+</Project>

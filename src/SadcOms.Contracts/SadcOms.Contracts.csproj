@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Integration event contracts shared by the API (publisher) and Worker (consumer).
+    Kept dependency-free and in its own assembly so the message schema is an explicit,
+    versionable contract rather than an internal type that could change accidentally.
+  -->
+  <PropertyGroup>
+    <RootNamespace>SadcOms.Contracts</RootNamespace>
+  </PropertyGroup>
+
+</Project>

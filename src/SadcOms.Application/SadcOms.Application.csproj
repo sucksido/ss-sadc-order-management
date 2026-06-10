@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Application layer: use-case orchestration, DTOs, validation and the abstractions the
+    infrastructure implements (IAppDbContext, IEventPublisher, IFxRateProvider). It depends
+    on EF Core's abstractions only (DbSet/SaveChanges) — a pragmatic trade-off that keeps
+    query code expressive without leaking a specific provider. See ANSWERS.md.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\SadcOms.Domain\SadcOms.Domain.csproj" />
+    <ProjectReference Include="..\SadcOms.Contracts\SadcOms.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+  </ItemGroup>
+
+</Project>
