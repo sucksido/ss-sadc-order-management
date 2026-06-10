@@ -202,7 +202,11 @@ cd src/web && npm run build      # front-end type-check + build
   SQL Server for the EF in-memory provider and stubbing the broker, while still exercising
   authentication and validation.
 
-The full testing strategy (test pyramid) is described in [ANSWERS.md](ANSWERS.md).
+Beyond unit/integration, the repo includes runnable **smoke** (`scripts/smoke-test.sh`),
+**security** (`scripts/security-test.sh`) and **performance** (`scripts/load-test.js` / `scripts/perf-test.sh`)
+tests against the live stack. See [docs/TESTING.md](docs/TESTING.md) for the full matrix mapping
+each testing type to its artifact and how to run it. The testing strategy (test pyramid) is also
+discussed in [ANSWERS.md](ANSWERS.md).
 
 ---
 
