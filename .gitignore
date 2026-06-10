@@ -21,6 +21,7 @@ project.lock.json
 node_modules/
 src/web/dist/
 src/web/.vite/
+*.tsbuildinfo
 *.log
 npm-debug.log*
 
