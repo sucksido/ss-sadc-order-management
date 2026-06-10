@@ -190,23 +190,40 @@ Errors are returned as RFC 7807 `application/problem+json`, including the `corre
 
 ## Testing
 
+The system is verified across eight testing levels. The full matrix (artifact → run command)
+is in [docs/TESTING.md](docs/TESTING.md); the summary below records what each level covers and
+the latest observed result.
+
+| Level | What it verifies | Artifact | Latest result |
+| ----- | ---------------- | -------- | ------------- |
+| **Unit** | Domain rules (SADC/CMA validation, server-side totals & rounding, lifecycle state machine), application services (order creation + outbox write, idempotent status updates, filtering/paging), FX provider | `tests/SadcOms.UnitTests` | **40 passed** |
+| **Integration** | Real ASP.NET Core pipeline via `WebApplicationFactory` — routing, model binding, validation, auth, ProblemDetails — with EF in-memory DB and stubbed broker | `tests/SadcOms.IntegrationTests` | **5 passed** |
+| **Functional** | Each business requirement asserted against the API as a black box (totals, currency rules, pagination, transitions, idempotency, ZAR report) | integration tests + `scripts/smoke-test.sh` | passed |
+| **System** | Whole stack running together (API, Worker, SQL Server, RabbitMQ, web); end-to-end order → outbox → RabbitMQ → worker fulfilment confirmed in worker logs | `docker-compose.yml` + `scripts/smoke-test.sh` | passed (fulfilment logged) |
+| **Smoke** | Fast post-deploy "alive & correct" pass across health, auth, customers, orders, status/idempotency, FX | `scripts/smoke-test.sh` | **20/20 passed** |
+| **Security** | Missing/garbage/empty/tampered tokens → 401; malformed JSON → 4xx (no 5xx leakage); injection-style search handled safely; page-size clamping; idempotency-key reuse across resources → 409 | `scripts/security-test.sh` | passed |
+| **Performance** | Staged load on read + write paths; thresholds `http_req_failed < 1%` and `p(95) < 500ms` | `scripts/load-test.js` (k6), `scripts/perf-test.sh` (curl) | **0 errors, p95 ≈ 10 ms** under 25 VUs |
+| **Regression** | Full unit + integration suite plus an EF "pending model changes" drift check, run on every push | `.github/workflows/ci.yml` | CI green |
+
+### How to run
+
 ```bash
-dotnet test                      # unit + integration tests
-cd src/web && npm run build      # front-end type-check + build
+# Unit + integration + regression (no external services needed)
+dotnet test
+
+# Front-end type-check + build
+cd src/web && npm run build && cd ../..
+
+# Smoke / functional / system / security / performance (against the running stack)
+docker compose up -d --build
+./scripts/smoke-test.sh
+docker compose logs worker | grep "Fulfilment simulated"   # confirms async fulfilment
+./scripts/security-test.sh
+./scripts/perf-test.sh 500 20                               # or the k6 profile (see docs/TESTING.md)
+docker compose down
 ```
 
-- **Unit tests** cover the domain rules (SADC/CMA validation, order totals, lifecycle state
-  machine), the application services (create order + outbox write, idempotent status updates,
-  filtering/paging), and the FX provider.
-- **Integration tests** drive the real HTTP pipeline with `WebApplicationFactory`, swapping
-  SQL Server for the EF in-memory provider and stubbing the broker, while still exercising
-  authentication and validation.
-
-Beyond unit/integration, the repo includes runnable **smoke** (`scripts/smoke-test.sh`),
-**security** (`scripts/security-test.sh`) and **performance** (`scripts/load-test.js` / `scripts/perf-test.sh`)
-tests against the live stack. See [docs/TESTING.md](docs/TESTING.md) for the full matrix mapping
-each testing type to its artifact and how to run it. The testing strategy (test pyramid) is also
-discussed in [ANSWERS.md](ANSWERS.md).
+The testing strategy (test pyramid) is also discussed in [ANSWERS.md](ANSWERS.md).
 
 ---
 
