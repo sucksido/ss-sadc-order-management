@@ -12,7 +12,7 @@ using SadcOms.Infrastructure.Persistence;
 namespace SadcOms.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260610101757_AddOutbox")]
+    [Migration("20260610103337_AddOutbox")]
     partial class AddOutbox
     {
         /// <inheritdoc />
